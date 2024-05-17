@@ -21,6 +21,11 @@ const Stack = styled('div', {
         flexDirection: 'column-reverse',
       },
     },
+    center: {
+      true: {
+        alignItems: 'center',
+      },
+    },
   },
 })
 
