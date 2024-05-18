@@ -9,7 +9,7 @@ import { Side } from './Side'
 
 function App() {
   return (
-    <ThemeProvider defaultTheme='light'>
+    <ThemeProvider defaultTheme='dark'>
       <Center
         column
         css={{

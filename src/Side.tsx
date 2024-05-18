@@ -3,6 +3,7 @@ import { ElementType, FC } from 'react'
 import { SelectLink } from './components/custom/link'
 import Stack from './components/custom/stack'
 import { Separator } from './components/ui/separator'
+import { ThemeSwitch } from './components/custom/theme'
 
 export interface SideItem {
   title: string
@@ -44,7 +45,7 @@ const RenderSelectLinks: FC<{
     <>
       {items.map((val) => (
         <SelectLink
-          className='w-[100%]'
+          className='w-[100%] px-3 py-2'
           title={val.title}
           to={val.to}
           icon={val.icon ? <val.icon className='h-4 w-4' /> : undefined}
@@ -62,6 +63,7 @@ export const Side: FC = () => {
       <RenderSelectLinks items={props.sideItems} />
       <span className='flex-1' />
       <Separator className='my-2' />
+      <ThemeSwitch className='w-[100%] px-3 py-2' />
       <RenderSelectLinks items={props.buttomItems} />
     </Stack>
   )
