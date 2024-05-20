@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/components/provider/theme'
 import { FC } from 'react'
-import { cn } from '@/lib/utils'
 import Stack from './stack'
 import { Switch } from '../ui/switch'
 
@@ -19,7 +18,7 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='icon'>
+        <Button variant='ghost' size='icon'>
           <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
           <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
           <span className='sr-only'>Toggle theme</span>
@@ -43,7 +42,7 @@ export function ThemeToggle() {
 export const ThemeSwitch: FC<{
   className?: string
 }> = ({ className }) => {
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   return (
     <Stack direction={'row'} className={className} center>
       <Stack direction={'row'} className='mr-2'>

@@ -8,6 +8,12 @@ const Container = styled('div', {
         borderWidth: '1px',
       },
     },
+    full: {
+      true: {
+        width: '100%',
+        height: '100%',
+      },
+    },
   },
 })
 

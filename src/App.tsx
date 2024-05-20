@@ -21,13 +21,13 @@ function App() {
           border
           css={{
             width: '60rem',
-            height: '36rem',
+            height: '33rem',
           }}
         >
           <Stack className='h-full w-full' direction={'row'}>
             <Side />
             <Separator orientation='vertical' />
-            <Container className='flex-1'>
+            <Container className='flex-1 p-4'>
               <Outlet />
             </Container>
           </Stack>
