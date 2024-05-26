@@ -6,6 +6,7 @@ export interface SelectLinkProps extends LinkProps {
   title: string
   selected?: boolean
   icon?: ReactElement
+  rightElement?: ReactElement
 }
 
 export const SelectLink: FC<SelectLinkProps> = ({
@@ -13,6 +14,7 @@ export const SelectLink: FC<SelectLinkProps> = ({
   icon,
   title,
   className,
+  rightElement,
   ...rest
 }) => {
   return (
@@ -26,6 +28,7 @@ export const SelectLink: FC<SelectLinkProps> = ({
     >
       {icon}
       {title}
+      {rightElement}
     </Link>
   )
 }

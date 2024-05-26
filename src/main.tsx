@@ -5,6 +5,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import { SettingPage } from './pages/Setting.tsx'
+import Camera from './pages/Camera.tsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: '/setting',
         element: <SettingPage />,
+      },
+      {
+        path: '/camera',
+        element: <Camera />,
       },
     ],
   },

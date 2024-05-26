@@ -8,28 +8,60 @@ interface Size {
 interface CameraState {
   isOpened: boolean
   size: Size
+  exposure: number
 }
 
-export class CameraStore {
+interface CameraSetting {
+  exposure?: number
+}
+
+class CameraStore {
   isOpened: boolean = false
   size: Size = {
     width: 1280,
     height: 720,
   }
+  exposure: number = 0
 
   constructor() {
     makeAutoObservable(this)
+    this.updateState()
+  }
+
+  _updateState(data: CameraState) {
+    Object.assign(this, data)
   }
 
   async open() {
     const res = await http.get<CameraState>('/camera/open')
-    this.isOpened = res.data.isOpened
+    const data = res.data
+    if (data.isOpened !== true) throw new Error('open camera failed')
+    this._updateState(data)
   }
 
   async close() {
     const res = await http.get<CameraState>('/camera/close')
-    this.isOpened = res.data.isOpened
-    this.size = res.data.size
+    const data = res.data
+    if (data.isOpened !== false) throw new Error('close camera failed')
+    this._updateState(data)
+  }
+
+  async updateSetting(setting: CameraSetting) {
+    const res = await http.put<CameraState>('/camera/setting', setting)
+    const data = res.data
+    this._updateState(data)
+  }
+
+  async setExposure(exposure: number) {
+    await this.updateSetting({
+      exposure,
+    })
+  }
+
+  async updateState() {
+    const res = await http.get<CameraState>('/camera/state')
+    const data = res.data
+    this._updateState(data)
   }
 }
 

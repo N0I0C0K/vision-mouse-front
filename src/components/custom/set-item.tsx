@@ -8,7 +8,7 @@ import Center from './center'
 export interface SettingItemProps {
   className?: string
   title: string
-  subTitle?: string
+  description?: string
   funcElement: ReactElement
   Icon: ElementType
 }
@@ -16,7 +16,7 @@ export interface SettingItemProps {
 export const SettingItem: FC<SettingItemProps> = ({
   Icon,
   className,
-  subTitle,
+  description: subTitle,
   title,
   funcElement,
 }) => {
@@ -36,7 +36,7 @@ export const SettingItem: FC<SettingItemProps> = ({
         )}
       </Stack>
       <Space />
-      <Center className='w-10' column>
+      <Center className='min-w-[4rem]' column>
         {funcElement}
       </Center>
     </Stack>

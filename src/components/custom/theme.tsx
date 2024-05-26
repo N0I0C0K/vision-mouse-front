@@ -42,7 +42,7 @@ export function ThemeToggle() {
 export const ThemeSwitch: FC<{
   className?: string
 }> = ({ className }) => {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
   return (
     <Stack direction={'row'} className={className} center>
       <Stack direction={'row'} className='mr-2'>
@@ -53,6 +53,7 @@ export const ThemeSwitch: FC<{
         onCheckedChange={(checked) => {
           setTheme(checked ? 'dark' : 'light')
         }}
+        checked={theme === 'dark'}
       />
     </Stack>
   )

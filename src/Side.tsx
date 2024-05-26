@@ -1,5 +1,5 @@
-import { Hand, Home, Settings, SquareKanban } from 'lucide-react'
-import { ElementType, FC } from 'react'
+import { Dot, Hand, Home, Settings, SquareKanban, Webcam } from 'lucide-react'
+import { ElementType, FC, ReactElement } from 'react'
 import { SelectLink } from './components/custom/link'
 import Stack from './components/custom/stack'
 import { Separator } from './components/ui/separator'
@@ -8,11 +8,13 @@ import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router-dom'
 import { camera } from './store/camera'
 import { Heading } from './components/custom/typography'
+import { cn } from './lib/utils'
 
 export interface SideItem {
   title: string
   to: string
   icon?: ElementType
+  right?: ReactElement
 }
 
 export interface SideProps {
@@ -20,12 +22,32 @@ export interface SideProps {
   buttomItems: SideItem[]
 }
 
+const RenderCameraOpenState = observer(() => {
+  return (
+    <>
+      <Dot
+        strokeWidth={3}
+        className={cn(
+          'ml-[-1rem]',
+          camera.isOpened ? 'text-green-500' : 'text-red-500'
+        )}
+      />
+    </>
+  )
+})
+
 const props: SideProps = {
   sideItems: [
     {
       title: 'Home',
       to: '/home',
       icon: Home,
+    },
+    {
+      title: 'Camera',
+      to: '/camera',
+      icon: Webcam,
+      right: <RenderCameraOpenState />,
     },
     {
       title: 'Preference',
@@ -59,30 +81,22 @@ const RenderSelectLinks: FC<{
           style={{
             fontFamily: 'Poetsen One',
           }}
+          rightElement={val.right}
         />
       ))}
     </>
   )
 }
 
-const RenderCameraSatet = observer(() => {
-  return (
-    <p className='w-[100%] text-gray-400'>
-      camera {camera.isOpened ? 'open' : 'close'}
-    </p>
-  )
-})
-
 export const Side: FC = () => {
   return (
     <Stack direction={'column'} className='py-4 px-2 w-40' center>
       <Hand size={60} />
-      <Heading className='mb-8 mt-2 font-normal' level='h3' styled>
+      <Heading className='mb-8 mt-2 font-normal' level='h4' styled>
         Vision Mouse
       </Heading>
       <RenderSelectLinks items={props.sideItems} />
       <span className='flex-1' />
-      <RenderCameraSatet />
       <Separator className='my-2' />
       <ThemeSwitch className='w-[100%] px-3 py-2' />
       <RenderSelectLinks items={props.buttomItems} />
