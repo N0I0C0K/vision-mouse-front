@@ -53,4 +53,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = 'Button'
 
-export { Button, buttonVariants }
+const IconButton: React.FC<
+  ButtonProps & {
+    Icon: React.ElementType
+  }
+> = ({ Icon, children, ...props }) => {
+  return (
+    <Button {...props}>
+      <Icon className='mr-3 w-4 h-4' />
+      {children}
+    </Button>
+  )
+}
+
+export { Button, buttonVariants, IconButton }

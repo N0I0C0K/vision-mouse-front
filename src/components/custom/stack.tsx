@@ -27,6 +27,10 @@ const Stack = styled('div', {
       },
     },
   },
+  defaultVariants: {
+    direction: 'row',
+    center: false,
+  },
 })
 
 export default Stack

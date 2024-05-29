@@ -41,7 +41,9 @@ export const SampleSelect: FC<SampleSelectProps> = ({
         <SelectGroup>
           {label && <SelectLabel>{label}</SelectLabel>}
           {items.map((val) => (
-            <SelectItem value={val.value}>{val.lable}</SelectItem>
+            <SelectItem value={val.value} key={val.value}>
+              {val.lable}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
