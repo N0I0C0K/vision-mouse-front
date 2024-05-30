@@ -137,7 +137,7 @@ const RenderGestureItem: FC<
   {
     die?: boolean
   } & MouseAction
-> = ({ die = false }) => {
+> = ({ die = false, name, icon: Icon }) => {
   return (
     <motion.div
       variants={{
@@ -158,10 +158,10 @@ const RenderGestureItem: FC<
       layout
       initial={'init'}
       animate={die ? 'die' : 'show'}
-      className='border p-2 rounded-md w-28 h-28 relative overflow-hidden shadow-md'
+      className='border p-2 rounded-md w-32 h-32 relative overflow-hidden shadow-md'
     >
-      <Text>左按下</Text>
-      <MouseLeftButton className='w-24 h-24 absolute -bottom-8 -right-8' />
+      <Text>{name}</Text>
+      <Icon className='w-24 h-24 absolute -bottom-6 -left-6' />
     </motion.div>
   )
 }
@@ -201,8 +201,8 @@ const RenderMouseAction = observer(() => {
 
 const Home: FC = observer(() => {
   return (
-    <Stack direction={'column'} className='gap-2 max-w-full'>
-      <Stack direction={'row'} className='gap-4'>
+    <Stack direction={'column'} className='gap-2 max-w-full h-full'>
+      <Stack direction={'row'} className='gap-4 h-full'>
         <RenderLandMark />
         <Stack direction={'column'} className='gap-1 flex-1'>
           <Heading>预览</Heading>

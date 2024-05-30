@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import { SettingPage } from './pages/Setting.tsx'
 import Camera from './pages/Camera.tsx'
+import { Preference } from './pages/Preference.tsx'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/camera',
         element: <Camera />,
+      },
+      {
+        path: '/preference',
+        element: <Preference />,
       },
     ],
   },

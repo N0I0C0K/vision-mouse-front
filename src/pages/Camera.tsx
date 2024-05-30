@@ -114,6 +114,10 @@ const Camera: FC = observer(() => {
       <AspectRatio ratio={camera.size.width / camera.size.height}>
         {camera.isOpened ? <RenderCamerRealTime /> : <RenderCamerClose />}
       </AspectRatio>
+      <Stack direction={'column'}>
+        <Heading className='mt-2'>相机参数</Heading>
+        <Text gray>相机的各种常用参数包括预览</Text>
+      </Stack>
       <SettingItem
         title='相机开关'
         Icon={Video}
@@ -125,8 +129,8 @@ const Camera: FC = observer(() => {
         Icon={ScanEye}
         funcElement={
           <SampleSelect
-            value='realCamer'
-            className='w-[10rem]'
+            className='w-36'
+            defaultValue='realCamer'
             placeholder='preview'
             label='预览选项'
             items={[
