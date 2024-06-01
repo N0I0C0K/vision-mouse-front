@@ -1,17 +1,12 @@
+import { SampleSlider } from '@/components/custom/samle-slider'
 import { SampleSelect } from '@/components/custom/sample-select'
-import { SettingItem } from '@/components/custom/set-item'
+import { ExpandSettingItem, SettingItem } from '@/components/custom/set-item'
 import { Space } from '@/components/custom/space'
 import Stack, { AnimateStack } from '@/components/custom/stack'
 import { Text, Heading } from '@/components/custom/typography'
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { connectStore, ConnectPair } from '@/store/connect'
+import { mouseStore } from '@/store/mouse'
 import { FastForward, Move, Link, CirclePlus } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
@@ -95,30 +90,49 @@ const RenderGestureAndCursorMapping = observer(() => {
     connectStore.update()
   }, [])
   return (
-    <>
-      <Accordion type='single' collapsible className='w-full'>
-        <AccordionItem
-          value='item-1'
-          className='border px-4 rounded-md shadow-sm'
-        >
-          <AccordionTrigger>
-            <Stack center>
-              <Link className='mr-5 w-5 h-5' />
-              <Stack direction={'column'} className='items-start'>
-                <Text>手势和鼠标控制</Text>
-                <Text gray level='xs'>
-                  配置手势和鼠标控制的联系
-                </Text>
-              </Stack>
-            </Stack>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Separator />
-            <RenderGestureAndCursorMapppingItems />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </>
+    <ExpandSettingItem
+      Icon={Link}
+      title='手势和鼠标控制'
+      description='配置手势和鼠标控制的联系'
+    >
+      <RenderGestureAndCursorMapppingItems />
+    </ExpandSettingItem>
+  )
+})
+
+const RenderMouseSpeedSlider = observer(() => {
+  return (
+    <SampleSlider
+      range={{
+        max: 0.2,
+        min: 0,
+      }}
+      value={[mouseStore.baseSpeed]}
+      step={0.01}
+      onValueCmt={(val) => {
+        mouseStore.updateState({
+          baseSpeed: val[0],
+        })
+      }}
+    />
+  )
+})
+
+const RenderMouseAcceleration = observer(() => {
+  return (
+    <SampleSlider
+      range={{
+        max: 0.2,
+        min: 0,
+      }}
+      value={[mouseStore.acceleration]}
+      step={0.01}
+      onValueCmt={(val) => {
+        mouseStore.updateState({
+          acceleration: val[0],
+        })
+      }}
+    />
   )
 })
 
@@ -135,13 +149,13 @@ export const Preference: FC = () => {
         title='鼠标移动速度'
         description='鼠标基础跟随手部的移动速度'
         Icon={Move}
-        funcElement={<></>}
+        funcElement={<RenderMouseSpeedSlider />}
       />
       <SettingItem
         title='鼠标移动加速度'
         description='手部移动越快鼠标所具有的加速度'
         Icon={FastForward}
-        funcElement={<></>}
+        funcElement={<RenderMouseAcceleration />}
       />
       <RenderGestureAndCursorMapping />
     </Stack>

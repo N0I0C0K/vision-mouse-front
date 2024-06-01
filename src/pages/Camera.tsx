@@ -1,5 +1,6 @@
 import Center from '@/components/custom/center'
 import Container from '@/components/custom/container'
+import { SampleSlider } from '@/components/custom/samle-slider'
 import { SampleSelect } from '@/components/custom/sample-select'
 import { SettingItem } from '@/components/custom/set-item'
 import { Space } from '@/components/custom/space'
@@ -81,27 +82,17 @@ const RenderCameraSwitch = observer(() => {
 })
 
 const RenderExposureSlider = observer(() => {
-  const [val, setVal] = useState(camera.exposure)
-  useEffect(() => {
-    setVal(camera.exposure)
-  }, [camera.exposure])
   return (
-    <>
-      <Slider
-        max={20}
-        value={[val + 10]}
-        step={1}
-        onValueChange={(vals) => {
-          setVal(vals[0] - 10)
-        }}
-        onValueCommit={(vals) => {
-          setVal(vals[0] - 10)
-          camera.setExposure(vals[0] - 10)
-        }}
-        className='w-24 mr-2'
-      />
-      <Text className='w-4'>{val}</Text>
-    </>
+    <SampleSlider
+      range={{
+        min: -10,
+        max: 10,
+      }}
+      value={[camera.exposure]}
+      onValueCmt={(val) => {
+        camera.setExposure(val[0])
+      }}
+    />
   )
 })
 

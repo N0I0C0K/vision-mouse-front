@@ -16,7 +16,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { nanoid } from 'nanoid'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Container from '@/components/custom/container'
-import { MouseAction, mouseActionStore } from '@/store/mouse'
+import { MouseAction, mouseStore } from '@/store/mouse'
 
 const RenderLandMarkNoConnect: FC<{ width: number; height: number }> = observer(
   ({ width, height }) => {
@@ -179,11 +179,14 @@ const RenderMouseActionQueue = observer(() => {
   return (
     <>
       <Stack className='gap-2 w-[46rem]'>
-        {mouseActionStore.actionQue.map((val, index) => (
+        {mouseStore.actionQue.map((val, index) => (
           <RenderGestureItem
             key={val.key}
-            die={index === mouseActionStore.maxSize - 1}
-            {...val}
+            die={index === mouseStore.maxSize - 1}
+            icon={val.icon}
+            name={val.name}
+            pos={val.pos}
+            time={val.time}
           />
         ))}
       </Stack>
@@ -192,7 +195,7 @@ const RenderMouseActionQueue = observer(() => {
 })
 
 const RenderMouseAction = observer(() => {
-  return mouseActionStore.actionQue.length === 0 ? (
+  return mouseStore.actionQue.length === 0 ? (
     <RenderMouseActionEmpty />
   ) : (
     <RenderMouseActionQueue />
