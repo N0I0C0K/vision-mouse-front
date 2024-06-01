@@ -65,7 +65,7 @@ const RenderLandMarkDraw: FC<{ width: number; height: number; scale: number }> =
                     y={pos.y}
                     radius={10}
                     fill='green'
-                    key={(idx + 1) * 100 + idx1 + 1}
+                    key={(idx + 1) * 1000 + idx1 + 1}
                   />
                 ))}
               </>
@@ -106,7 +106,7 @@ const RenderColumnButton = observer(() => {
             try {
               await flowStore.start()
               landMark.startFetch()
-              //mouseActionStore.startFetch()
+              mouseStore.startFetch()
             } catch {
               /* empty */
             }
@@ -114,7 +114,7 @@ const RenderColumnButton = observer(() => {
           } else {
             await flowStore.stop()
             landMark.stopFetch()
-            //mouseActionStore.stopFetch()
+            mouseStore.stopFetch()
           }
         }}
       >
@@ -143,6 +143,7 @@ const RenderGestureItem: FC<
       variants={{
         die: {
           x: 100,
+          width: 0,
           opacity: 0,
         },
         show: {
@@ -178,7 +179,7 @@ const RenderMouseActionEmpty = () => {
 const RenderMouseActionQueue = observer(() => {
   return (
     <>
-      <Stack className='gap-2 w-[46rem]'>
+      <Stack className='gap-2 w-[46rem] justify-center'>
         {mouseStore.actionQue.map((val, index) => (
           <RenderGestureItem
             key={val.key}

@@ -7,16 +7,46 @@ import { Text, Heading } from '@/components/custom/typography'
 import { Button } from '@/components/ui/button'
 import { connectStore, ConnectPair } from '@/store/connect'
 import { mouseStore } from '@/store/mouse'
-import { FastForward, Move, Link, CirclePlus } from 'lucide-react'
+import {
+  FastForward,
+  Move,
+  Link,
+  CirclePlus,
+  CircleMinus,
+  Save,
+} from 'lucide-react'
+import { toast } from 'sonner'
 import { observer } from 'mobx-react-lite'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 const RenderGestureAndCursorMapppingItem: FC<
   {
     gestureMatches: string[]
     cursorHandlers: string[]
+    onPairChange?: (data: ConnectPair) => void
+    onDel?: () => void
   } & ConnectPair
-> = ({ gestureMatches, cursorHandlers, handle, match, matchFunc }) => {
+> = ({
+  gestureMatches,
+  cursorHandlers,
+  handle,
+  match,
+  matchFunc,
+  onPairChange,
+  onDel,
+}) => {
+  const [tmatch, SetMatch] = useState(match)
+  const [tmatchFunc, SetMatchFunc] = useState(matchFunc)
+  const [thandle, SetHandle] = useState(handle)
+
+  useEffect(() => {
+    onPairChange?.({
+      match: tmatch,
+      handle: thandle,
+      matchFunc: tmatchFunc,
+    })
+  }, [tmatch, tmatchFunc, thandle])
+
   return (
     <AnimateStack
       center
@@ -34,6 +64,8 @@ const RenderGestureAndCursorMapppingItem: FC<
         placeholder='选择手势识别'
         label='全部'
         items={gestureMatches.map((val) => ({ lable: val, value: val }))}
+        value={tmatch}
+        onValueChange={(val) => SetMatch(val)}
         defaultValue={match}
       />
       +
@@ -50,6 +82,8 @@ const RenderGestureAndCursorMapppingItem: FC<
             value: 'JumpFalse',
           },
         ]}
+        value={tmatchFunc}
+        onValueChange={(val) => SetMatchFunc(val)}
         defaultValue={matchFunc}
       />
       <Space />
@@ -59,28 +93,85 @@ const RenderGestureAndCursorMapppingItem: FC<
         placeholder='鼠标处理'
         label='全部'
         items={cursorHandlers.map((val) => ({ lable: val, value: val }))}
+        value={thandle}
+        onValueChange={(val) => SetHandle(val)}
         defaultValue={handle}
       />
+      <Button variant={'ghost'} size='icon' onClick={onDel}>
+        <CircleMinus />
+      </Button>
     </AnimateStack>
   )
 }
 
 const RenderGestureAndCursorMapppingItems = observer(() => {
+  const [connects, setConnects] = useState<(ConnectPair & { key?: string })[]>(
+    connectStore.connect
+  )
+  const cursorHandlers = useMemo(
+    () => connectStore.cursorHandlers,
+    [connectStore.cursorHandlers]
+  )
+  const gestureMatches = useMemo(
+    () => connectStore.gestureMatches,
+    [connectStore.gestureMatches]
+  )
   return (
     <Stack direction={'column'} center className='gap-2 mt-4 p-2'>
-      {connectStore.connect.map((val) => (
+      {connects.map((val, idx) => (
         <RenderGestureAndCursorMapppingItem
-          cursorHandlers={connectStore.cursorHandlers}
-          gestureMatches={connectStore.gestureMatches}
+          cursorHandlers={cursorHandlers}
+          gestureMatches={gestureMatches}
           handle={val.handle}
           match={val.match}
           matchFunc={val.matchFunc}
-          key={val.match + val.matchFunc}
+          key={idx}
+          onPairChange={(data) => {
+            setConnects(
+              connects.map((val, idx1) => {
+                if (idx1 != idx) {
+                  return val
+                }
+                return data
+              })
+            )
+          }}
+          onDel={() => {
+            setConnects(connects.filter((_, idx1) => idx != idx1))
+          }}
         />
       ))}
-      <Button variant={'ghost'} size={'icon'}>
-        <CirclePlus />
-      </Button>
+      <Stack>
+        <Button
+          variant={'ghost'}
+          size={'icon'}
+          onClick={() => {
+            setConnects([
+              ...connects,
+              {
+                match: gestureMatches[0],
+                matchFunc: 'JumpTrue',
+                handle: cursorHandlers[0],
+              },
+            ])
+          }}
+        >
+          <CirclePlus />
+        </Button>
+        <Button
+          size='icon'
+          variant={'ghost'}
+          onClick={() => {
+            connectStore.updateConnect(connects).catch((err) => {
+              toast.error('保存失败', {
+                description: err.message,
+              })
+            })
+          }}
+        >
+          <Save />
+        </Button>
+      </Stack>
     </Stack>
   )
 })

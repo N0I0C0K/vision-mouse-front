@@ -15,9 +15,19 @@ export interface Position {
   y: number
 }
 
+type Handle = 'LeftDown' | 'LeftUp' | 'RightClick' | 'ScrollDown' | 'ScrollUp'
+
+const ActionAndIconMappig: Record<Handle, React.ElementType> = {
+  LeftDown: MouseLeftButton,
+  LeftUp: MouseLeftButton,
+  RightClick: MouseRightButton,
+  ScrollDown: MouseScrollDown,
+  ScrollUp: MouseScrollUp,
+}
+
 export interface MouseAction {
   key?: string
-  name: string
+  name: Handle
   time: number
   pos: Position
   icon: React.ElementType
@@ -41,7 +51,7 @@ export async function UpdateMouseState(state: Partial<MouseState>) {
 
 class MouseStore extends WebSockerStore {
   actionQue: MouseAction[]
-  maxSize = 5
+  maxSize = 6
   baseSpeed: number
   acceleration: number
   pos: Position
@@ -54,48 +64,7 @@ class MouseStore extends WebSockerStore {
       x: 1,
       y: 1,
     }
-    this.actionQue = [
-      {
-        key: '1',
-        name: 'Left Down',
-        icon: MouseLeftButton,
-        pos: {
-          x: 102,
-          y: 222,
-        },
-        time: 1212212,
-      },
-      {
-        key: '2',
-        name: 'Right Click',
-        icon: MouseRightButton,
-        pos: {
-          x: 102,
-          y: 222,
-        },
-        time: 1212212,
-      },
-      {
-        key: '3',
-        name: 'Scroll Down',
-        icon: MouseScrollDown,
-        pos: {
-          x: 102,
-          y: 222,
-        },
-        time: 1212212,
-      },
-      {
-        key: '4',
-        name: 'Scroll Up',
-        icon: MouseScrollUp,
-        pos: {
-          x: 102,
-          y: 222,
-        },
-        time: 1212212,
-      },
-    ]
+    this.actionQue = []
     this.updateState()
     makeObservable(this, {
       actionQue: observable,
@@ -108,6 +77,7 @@ class MouseStore extends WebSockerStore {
 
   addAction(action: MouseAction) {
     action.key = nanoid()
+    action.icon = ActionAndIconMappig[action.name]
     this.actionQue = [action, ...this.actionQue].slice(0, this.maxSize)
   }
 
@@ -129,6 +99,7 @@ class MouseStore extends WebSockerStore {
       })
     )
   }
+
   stopFetch() {
     this.close()
   }
