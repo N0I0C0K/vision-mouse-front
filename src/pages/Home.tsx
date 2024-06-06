@@ -17,6 +17,7 @@ import { nanoid } from 'nanoid'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Container from '@/components/custom/container'
 import { MouseAction, mouseStore } from '@/store/mouse'
+import { Space } from '@/components/custom/space'
 
 const RenderLandMarkNoConnect: FC<{ width: number; height: number }> = observer(
   ({ width, height }) => {
@@ -137,7 +138,7 @@ const RenderGestureItem: FC<
   {
     die?: boolean
   } & MouseAction
-> = ({ die = false, name, icon: Icon }) => {
+> = ({ die = false, name, icon: Icon, pos, time }) => {
   return (
     <motion.div
       variants={{
@@ -159,9 +160,10 @@ const RenderGestureItem: FC<
       layout
       initial={'init'}
       animate={die ? 'die' : 'show'}
-      className='border p-2 rounded-md w-32 h-32 relative overflow-hidden shadow-md'
+      className='border p-2 rounded-md w-32 h-32 relative overflow-hidden shadow-md flex flex-col items-end'
     >
-      <Text>{name}</Text>
+      <Text className='font-semibold'>{name}</Text>
+      <Text level='xs' gray>{`${pos.x},${pos.y}`}</Text>
       <Icon className='w-24 h-24 absolute -bottom-6 -left-6' />
     </motion.div>
   )
@@ -179,7 +181,7 @@ const RenderMouseActionEmpty = () => {
 const RenderMouseActionQueue = observer(() => {
   return (
     <>
-      <Stack className='gap-2 w-[46rem] justify-center'>
+      <Stack className='gap-2 w-full justify-center' center>
         {mouseStore.actionQue.map((val, index) => (
           <RenderGestureItem
             key={val.key}
@@ -217,7 +219,7 @@ const Home: FC = observer(() => {
           <RenderColumnButton />
         </Stack>
       </Stack>
-      <Separator />
+      <Separator className='my-2' />
       <RenderMouseAction />
     </Stack>
   )

@@ -29,6 +29,10 @@ const router = createBrowserRouter([
         path: '/preference',
         element: <Preference />,
       },
+      {
+        path: '',
+        element: <Home />,
+      },
     ],
   },
 ])

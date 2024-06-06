@@ -1,5 +1,6 @@
 import { http } from '@/lib'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, reaction } from 'mobx'
+import { camera } from './camera'
 
 export interface FlowState {
   running: boolean
@@ -32,3 +33,10 @@ class FlowStore {
 }
 
 export const flowStore = new FlowStore()
+
+reaction(
+  () => flowStore.running,
+  (running) => {
+    camera.isOpened = running
+  }
+)

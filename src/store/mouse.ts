@@ -51,7 +51,7 @@ export async function UpdateMouseState(state: Partial<MouseState>) {
 
 class MouseStore extends WebSockerStore {
   actionQue: MouseAction[]
-  maxSize = 6
+  maxSize = 5
   baseSpeed: number
   acceleration: number
   pos: Position

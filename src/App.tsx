@@ -13,7 +13,7 @@ import { isTauri } from './lib/utils'
 function AppContent() {
   return (
     <>
-      <Stack className='h-full w-full' direction={'row'}>
+      <Stack className='h-full w-full rounded-md' direction={'row'}>
         <Side />
         <Separator orientation='vertical' />
         <Container className='flex-1 p-1 w-full h-full'>
@@ -22,7 +22,7 @@ function AppContent() {
           </ScrollArea>
         </Container>
       </Stack>
-      <Toaster position='top-right' richColors />
+      <Toaster position='top-right' richColors closeButton />
     </>
   )
 }
@@ -35,6 +35,7 @@ function App() {
         css={{
           height: '100vh',
         }}
+        className='rounded-md'
       >
         {isTauri ? (
           <AppContent />
