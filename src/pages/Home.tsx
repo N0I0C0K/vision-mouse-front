@@ -1,8 +1,7 @@
 import { Spin } from '@/components/custom/spin'
 import Stack from '@/components/custom/stack'
 import { Heading, Text } from '@/components/custom/typography'
-import { MouseLeftButton } from '@/components/icons'
-import { Button, IconButton } from '@/components/ui/button'
+import { IconButton } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { flowStore } from '@/store/flow'
@@ -12,12 +11,8 @@ import { observer } from 'mobx-react-lite'
 import { FC, useState } from 'react'
 import { Stage, Circle, Layer } from 'react-konva'
 import { useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { nanoid } from 'nanoid'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import Container from '@/components/custom/container'
+import { motion } from 'framer-motion'
 import { MouseAction, mouseStore } from '@/store/mouse'
-import { Space } from '@/components/custom/space'
 
 const RenderLandMarkNoConnect: FC<{ width: number; height: number }> = observer(
   ({ width, height }) => {

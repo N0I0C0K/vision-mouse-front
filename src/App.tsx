@@ -9,11 +9,14 @@ import { Side } from './Side'
 import { Toaster } from './components/ui/sonner'
 import { ScrollArea } from './components/ui/scroll-area'
 import { isTauri } from './lib/utils'
+import { Button } from './components/ui/button'
+import { X } from 'lucide-react'
+import { DevTools } from './pages/DevTools'
 
 function AppContent() {
   return (
     <>
-      <Stack className='h-full w-full rounded-md' direction={'row'}>
+      <Stack className='h-full w-full' direction={'row'}>
         <Side />
         <Separator orientation='vertical' />
         <Container className='flex-1 p-1 w-full h-full'>
@@ -27,19 +30,32 @@ function AppContent() {
   )
 }
 
+function TauriAppBar() {
+  return (
+    <Stack direction={'rowr'} className='py-1 pr-2' data-tauri-drag-region=''>
+      <Button className='w-6 h-6' size={'icon'} variant={'ghost'}>
+        <X size={20} />
+      </Button>
+    </Stack>
+  )
+}
+
 function App() {
   return (
-    <ThemeProvider defaultTheme='dark'>
-      <Center
-        column
-        css={{
-          height: '100vh',
-        }}
-        className='rounded-md'
-      >
-        {isTauri ? (
+    <Center
+      column
+      css={{
+        height: '100vh',
+      }}
+    >
+      {isTauri ? (
+        <Stack className='h-full w-full' direction={'column'}>
+          <TauriAppBar />
+          <Separator />
           <AppContent />
-        ) : (
+        </Stack>
+      ) : (
+        <>
           <Container
             className='shadow-sm'
             border
@@ -50,9 +66,10 @@ function App() {
           >
             <AppContent />
           </Container>
-        )}
-      </Center>
-    </ThemeProvider>
+          <DevTools />
+        </>
+      )}
+    </Center>
   )
 }
 
