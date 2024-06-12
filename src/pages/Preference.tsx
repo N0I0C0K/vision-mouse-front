@@ -23,12 +23,14 @@ const RenderGestureAndCursorMapppingItem: FC<
   {
     gestureMatches: string[]
     cursorHandlers: string[]
+    matchFuncs: string[]
     onPairChange?: (data: ConnectPair) => void
     onDel?: () => void
   } & ConnectPair
 > = ({
   gestureMatches,
   cursorHandlers,
+  matchFuncs,
   handle,
   match,
   matchFunc,
@@ -72,16 +74,7 @@ const RenderGestureAndCursorMapppingItem: FC<
       <SampleSelect
         placeholder='检测函数'
         label='全部'
-        items={[
-          {
-            lable: '跳变到真',
-            value: 'JumpTrue',
-          },
-          {
-            lable: '跳变到假',
-            value: 'JumpFalse',
-          },
-        ]}
+        items={matchFuncs.map((val) => ({ lable: val, value: val }))}
         value={tmatchFunc}
         onValueChange={(val) => SetMatchFunc(val)}
         defaultValue={matchFunc}
@@ -122,6 +115,7 @@ const RenderGestureAndCursorMapppingItems = observer(() => {
         <RenderGestureAndCursorMapppingItem
           cursorHandlers={cursorHandlers}
           gestureMatches={gestureMatches}
+          matchFuncs={connectStore.matchFuncs}
           handle={val.handle}
           match={val.match}
           matchFunc={val.matchFunc}

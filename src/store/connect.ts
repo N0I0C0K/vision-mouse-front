@@ -10,6 +10,7 @@ export interface ConnectPair {
 export interface GestureAndCursorMapping {
   gestureMatches: string[]
   cursorHandlers: string[]
+  matchFuncs: string[]
   connect: ConnectPair[]
 }
 
@@ -42,6 +43,7 @@ function VerifyConnectPair(connects: ConnectPair[]) {
 class ConnectStore {
   gestureMatches: string[] = []
   cursorHandlers: string[] = []
+  matchFuncs: string[] = []
   connect: ConnectPair[] = []
   constructor() {
     makeAutoObservable(this)
@@ -51,6 +53,7 @@ class ConnectStore {
     this.connect = data.connect
     this.cursorHandlers = data.cursorHandlers
     this.gestureMatches = data.gestureMatches
+    this.matchFuncs = data.matchFuncs
   }
 
   async updateConnect(connects: ConnectPair[]) {

@@ -5,10 +5,10 @@ import { IconButton } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { flowStore } from '@/store/flow'
-import { landMark } from '@/store/landmark'
+import { HandInfo, landMark } from '@/store/landmark'
 import { CircleOff, ExternalLink, Mouse, Power } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { Stage, Circle, Layer } from 'react-konva'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -35,6 +35,30 @@ const RenderLandMarkNoConnect: FC<{ width: number; height: number }> = observer(
   }
 )
 
+function RenderHand({
+  handInfo,
+  pkey,
+  color,
+}: {
+  handInfo: HandInfo
+  pkey: number
+  color?: string
+}) {
+  return (
+    <>
+      {handInfo.map((pos, idx1) => (
+        <Circle
+          x={pos.x}
+          y={pos.y}
+          radius={10}
+          fill={color ?? 'green'}
+          key={(pkey + 1 * 1000) ^ (idx1 + 1)}
+        />
+      ))}
+    </>
+  )
+}
+
 const RenderLandMarkDraw: FC<{ width: number; height: number; scale: number }> =
   observer(({ width, height, scale }) => {
     return (
@@ -53,27 +77,20 @@ const RenderLandMarkDraw: FC<{ width: number; height: number; scale: number }> =
       >
         <Layer>
           {landMark.allHand.map((val, idx) => {
-            return (
-              <>
-                {val.map((pos, idx1) => (
-                  <Circle
-                    x={pos.x}
-                    y={pos.y}
-                    radius={10}
-                    fill='green'
-                    key={(idx + 1) * 1000 + idx1 + 1}
-                  />
-                ))}
-              </>
-            )
+            return <RenderHand key={idx} handInfo={val} pkey={idx} />
           })}
+          <RenderHand pkey={1273} handInfo={landMark.currentHand} color='red' />
         </Layer>
       </Stage>
     )
   })
 
-const RenderLandMark = observer(() => {
-  const scale = 0.44
+export const RenderLandMark: FC<{
+  scale?: number
+}> = observer(({ scale: scaled }) => {
+  const scale = useMemo(() => {
+    return scaled ?? 0.44
+  }, [scaled])
   return landMark.connected ? (
     <RenderLandMarkDraw
       width={landMark.width * scale}
@@ -173,7 +190,7 @@ const RenderMouseActionEmpty = () => {
   )
 }
 
-const RenderMouseActionQueue = observer(() => {
+export const RenderMouseActionQueue = observer(() => {
   return (
     <>
       <Stack className='gap-2 w-full justify-center' center>
