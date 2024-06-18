@@ -20,6 +20,7 @@ function AppContent() {
         <Side />
         <Separator orientation='vertical' />
         <Container className='flex-1 p-1 w-full h-full'>
+          <TauriAppBar />
           <ScrollArea className='w-full h-full p-3 rounded-sm'>
             <Outlet />
           </ScrollArea>
@@ -32,7 +33,7 @@ function AppContent() {
 
 function TauriAppBar() {
   return (
-    <Stack direction={'rowr'} className='py-1 pr-2' data-tauri-drag-region=''>
+    <Stack direction={'rowr'} className='pr-2' data-tauri-drag-region=''>
       <Button className='w-6 h-6' size={'icon'} variant={'ghost'}>
         <X size={20} />
       </Button>
@@ -49,9 +50,7 @@ function App() {
       }}
     >
       {isTauri ? (
-        <Stack className='h-full w-full' direction={'column'}>
-          <TauriAppBar />
-          <Separator />
+        <Stack className='h-full w-full shadow-lg' direction={'column'}>
           <AppContent />
         </Stack>
       ) : (
