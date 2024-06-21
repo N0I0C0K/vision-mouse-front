@@ -8,7 +8,7 @@ import { Spin } from '@/components/custom/spin'
 import Stack from '@/components/custom/stack'
 import { Heading, Text } from '@/components/custom/typography'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
@@ -52,11 +52,12 @@ const RenderCameraSwitch = observer(() => {
           }}
           variant={'destructive'}
         >
-          Close
+          关闭相机
         </Button>
       ) : (
-        <Button
+        <IconButton
           disabled={opening}
+          Icon={opening ? Spin : Video}
           onClick={() => {
             setOpening(true)
             camera
@@ -73,9 +74,8 @@ const RenderCameraSwitch = observer(() => {
               })
           }}
         >
-          {opening && <Spin />}
-          Open
-        </Button>
+          打开相机
+        </IconButton>
       )}
     </>
   )
@@ -102,18 +102,24 @@ const Camera: FC = observer(() => {
       direction={'column'}
       className='flex-1 gap-2 h-[100%] w-[100%] scorll'
     >
-      <AspectRatio ratio={camera.size.width / camera.size.height}>
-        {camera.isOpened ? <RenderCamerRealTime /> : <RenderCamerClose />}
-      </AspectRatio>
-      <Stack direction={'column'}>
-        <Heading className='mt-2'>相机参数</Heading>
-        <Text gray>相机的各种常用参数包括预览</Text>
+      <Stack className='gap-2'>
+        <Container className='flex-1 min-w-[20rem]'>
+          <AspectRatio ratio={camera.size.width / camera.size.height}>
+            {camera.isOpened ? <RenderCamerRealTime /> : <RenderCamerClose />}
+          </AspectRatio>
+        </Container>
+        <Stack direction={'column'}>
+          <Heading className='mt-2'>相机参数</Heading>
+          <Text gray>相机的各种常用参数包括预览</Text>
+          <Separator className='my-2' />
+          <RenderCameraSwitch />
+        </Stack>
       </Stack>
-      <SettingItem
+      {/* <SettingItem
         title='相机开关'
         Icon={Video}
         funcElement={<RenderCameraSwitch />}
-      />
+      /> */}
       <SettingItem
         title='相机预览源'
         description='选择实时画面预览来源'

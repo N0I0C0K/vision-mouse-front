@@ -10,8 +10,10 @@ import { Toaster } from './components/ui/sonner'
 import { ScrollArea } from './components/ui/scroll-area'
 import { isTauri } from './lib/utils'
 import { Button } from './components/ui/button'
-import { X } from 'lucide-react'
+import { X, Minus, Maximize } from 'lucide-react'
+
 import { DevTools } from './pages/DevTools'
+import { appWindow } from '@tauri-apps/api/window'
 
 function AppContent() {
   return (
@@ -33,9 +35,40 @@ function AppContent() {
 
 function TauriAppBar() {
   return (
-    <Stack direction={'rowr'} className='pr-2' data-tauri-drag-region=''>
-      <Button className='w-6 h-6' size={'icon'} variant={'ghost'}>
-        <X size={20} />
+    <Stack
+      direction={'rowr'}
+      className='pr-2 pt-1 gap-1'
+      data-tauri-drag-region=''
+    >
+      <Button
+        className='w-4 h-4 rounded-full bg-red-500'
+        size={'icon'}
+        variant={'default'}
+        onClick={() => {
+          appWindow.close()
+        }}
+      >
+        <X size={13} strokeWidth={3} />
+      </Button>
+      <Button
+        className='w-4 h-4 rounded-full bg-yellow-500'
+        size={'icon'}
+        variant={'default'}
+        onClick={() => {
+          appWindow.maximize()
+        }}
+      >
+        <Maximize size={10} strokeWidth={3} />
+      </Button>
+      <Button
+        className='w-4 h-4 rounded-full bg-green-500'
+        size={'icon'}
+        variant={'default'}
+        onClick={() => {
+          appWindow.minimize()
+        }}
+      >
+        <Minus size={13} strokeWidth={3} />
       </Button>
     </Stack>
   )

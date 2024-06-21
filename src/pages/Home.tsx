@@ -8,32 +8,28 @@ import { flowStore } from '@/store/flow'
 import { HandInfo, landMark } from '@/store/landmark'
 import { CircleOff, ExternalLink, Mouse, Power } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { FC, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { Stage, Circle, Layer } from 'react-konva'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MouseAction, mouseStore } from '@/store/mouse'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import Container from '@/components/custom/container'
 
-const RenderLandMarkNoConnect: FC<{ width: number; height: number }> = observer(
-  ({ width, height }) => {
-    return (
-      <Stack
-        direction={'column'}
-        center
-        className='bg-muted rounded-sm justify-center'
-        style={{
-          width,
-          height,
-        }}
-      >
-        <CircleOff size={40} />
-        <Text className='mt-2' gray>
-          还没有打开
-        </Text>
-      </Stack>
-    )
-  }
-)
+const RenderLandMarkNoConnect: FC = observer(() => {
+  return (
+    <Stack
+      direction={'column'}
+      center
+      className='bg-muted rounded-sm justify-center w-full h-full'
+    >
+      <CircleOff size={40} />
+      <Text className='mt-2' gray>
+        还没有打开
+      </Text>
+    </Stack>
+  )
+})
 
 function RenderHand({
   handInfo,
@@ -88,20 +84,42 @@ const RenderLandMarkDraw: FC<{ width: number; height: number; scale: number }> =
 export const RenderLandMark: FC<{
   scale?: number
 }> = observer(({ scale: scaled }) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [resizeSig, setSig] = useState(0)
+  const resizeObserver = useMemo(() => {
+    return new ResizeObserver(() => setSig((x) => x + 1))
+  }, [])
+  useEffect(() => {
+    if (containerRef.current) resizeObserver.observe(containerRef.current)
+  }, [containerRef.current])
+  const size = useMemo(() => {
+    return containerRef.current === null
+      ? {
+          width: landMark.width,
+          height: landMark.height,
+        }
+      : {
+          width: containerRef.current.clientWidth,
+          height: containerRef.current.clientHeight,
+        }
+  }, [containerRef.current, landMark, resizeSig])
   const scale = useMemo(() => {
-    return scaled ?? 0.44
-  }, [scaled])
-  return landMark.connected ? (
-    <RenderLandMarkDraw
-      width={landMark.width * scale}
-      height={landMark.height * scale}
-      scale={scale}
-    />
-  ) : (
-    <RenderLandMarkNoConnect
-      width={landMark.width * scale}
-      height={landMark.height * scale}
-    />
+    return size.width / landMark.width
+  }, [size])
+  return (
+    <Container className='flex-1'>
+      <AspectRatio ratio={landMark.width / landMark.height} ref={containerRef}>
+        {landMark.connected ? (
+          <RenderLandMarkDraw
+            width={size.width}
+            height={size.height}
+            scale={scale}
+          />
+        ) : (
+          <RenderLandMarkNoConnect />
+        )}
+      </AspectRatio>
+    </Container>
   )
 })
 
@@ -222,7 +240,7 @@ const Home: FC = observer(() => {
     <Stack direction={'column'} className='gap-2 max-w-full h-full'>
       <Stack direction={'row'} className='gap-4 h-full'>
         <RenderLandMark />
-        <Stack direction={'column'} className='gap-1 flex-1'>
+        <Stack direction={'column'} className='gap-1 w-[10rem]'>
           <Heading>预览</Heading>
           <Text level='s' gray>
             实时预览手势识别

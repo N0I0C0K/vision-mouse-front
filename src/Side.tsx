@@ -91,7 +91,7 @@ const RenderSelectLinks: FC<{
 export const Side: FC = () => {
   return (
     <Stack direction={'column'} className='py-4 px-2 w-40' center>
-      <Hand size={60} />
+      <Hand size={60} className='my-2 min-h-10' />
       <Heading className='mb-8 mt-2 font-normal' level='h4' styled>
         Vision Mouse
       </Heading>
